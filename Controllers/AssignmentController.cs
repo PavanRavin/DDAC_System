@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DDAC_System.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DDAC_System.Controllers
 {
+    [Authorize(Roles="Teacher")]
     public class AssignmentController : Controller
     {
         private readonly System_AssignmentDBContext _context;
