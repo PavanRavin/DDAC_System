@@ -10,5 +10,7 @@ namespace DDAC_System.Models
         {
         }
         public DbSet<AcademicClass> AcademicClass { get; set; }
+
+        public DbSet<ViewClass> ViewClas { get; set; }
     }
 }

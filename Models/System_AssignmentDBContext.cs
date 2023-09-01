@@ -10,5 +10,7 @@ namespace DDAC_System.Models
         {
         }
         public DbSet<Assignment> Assignment { get; set; }
+
+        public DbSet<ViewAssignment> ViewAssignment { get; set; }
     }
 }
