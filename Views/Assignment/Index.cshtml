@@ -1,0 +1,53 @@
+﻿@model IEnumerable<DDAC_System.Models.Assignment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AssignmentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssignmentDesc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssignmentHandOut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssignmentDue)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignmentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignmentDesc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignmentHandOut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignmentDue)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AssignmentID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AssignmentID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AssignmentID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
