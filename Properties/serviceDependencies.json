@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DDAC_SystemContextConnection"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:System_ClassDBContextCon"
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:System_AssignmentDBContextCon"
+    }
+  }
+}
