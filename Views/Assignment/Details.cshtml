@@ -43,6 +43,10 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.AssignmentID">Edit</a> |
+    @if (User.IsInRole("Teacher"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.AssignmentID">Edit</a>
+        <a asp-controller="AssignmentSubmission" asp-action="Index" asp-route-id="@Model.AssignmentID">Submissions</a>
+    }
     <a asp-action="Index">Back to List</a>
 </div>

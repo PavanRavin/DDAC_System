@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DDAC_System.Models.AssignmentSubmission>
+
+@{
+    ViewData["Title"] = "Submited Assignment";
+}
+
+<h1>Submited Assignments</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Submission Name
+            </th>
+            <th>
+                Submission Time
+            </th>
+            <th>
+                Assignment
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmitName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmitTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assignment.Class_Name)
+            </td>
+            <th>
+                <a asp-action="DownloadFiles">Download</a>
+            </th>
+        </tr>
+}
+    </tbody>
+</table>

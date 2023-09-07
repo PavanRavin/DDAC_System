@@ -1,13 +1,13 @@
 ﻿@model DDAC_System.Models.AcademicClass
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "ClassDetails";
 }
 
-<h1>Details</h1>
+<h1>Details for @Model.Class_Name</h1>
 
 <div>
-    <h4>AcademicClass</h4>
+    <h4>Class</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -43,6 +43,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Class_ID">Edit</a> |
+    @if (User.IsInRole("Admin"))
+    {<a asp-action="Edit" asp-route-id="@Model.Class_ID">Edit</a>}
     <a asp-action="Index">Back to List</a>
 </div>

@@ -7,17 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DDAC_System.Models;
 using Microsoft.AspNetCore.Authorization;
+using DDAC_System.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace DDAC_System.Controllers
 {
     [Authorize(Roles = "Teacher,Student")]
     public class AssignmentController : Controller
+    {
         //private readonly System_ClassDBContext _ClassDBContext;
         private readonly UserManager<DDAC_SystemUser> _userManager;
         private readonly System_ClassDBContext _context;
 
         public AssignmentController(System_ClassDBContext context, UserManager<DDAC_SystemUser> usermanager)
         {
+            _context = context;
             _userManager = usermanager;
         }
 
@@ -31,9 +35,9 @@ namespace DDAC_System.Controllers
             return classes;
         }
 
-    public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            return View(await _context.Assignment.ToListAsync());
+                return View(await _context.Assignment.OrderBy(e => e.AssignmentHandOut).ToListAsync());
         }
 
         // GET: Assignment/Details/5

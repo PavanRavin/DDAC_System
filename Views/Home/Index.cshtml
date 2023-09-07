@@ -42,49 +42,47 @@
     </div>
     }
     else @if (User.IsInRole("Teacher"))
-{
-<div class="card-deck">
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Assignment Control</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Manage Assignments</h6>
-            <p class="card-text">Create, Edit, Delete or List details of all Assignments</p>
-            <a class="card-link" asp-area="" asp-controller="Assignment" asp-action="Index">Assignments</a>
+    {
+    <div class="card-deck">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Assignment Control</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Manage Assignments</h6>
+                <p class="card-text">Create, Edit, Delete or List details of all Assignments</p>
+                <a class="card-link" asp-area="" asp-controller="Assignment" asp-action="Index">Assignments</a>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Classes</h5>
+                <h6 class="card-subtitle mb-2 text-muted">View Classes</h6>
+                <p class="card-text">View all Classes registered for this semester</p>
+                <a class="card-link" asp-area="" asp-controller="AcademicClass" asp-action="Index">Classes</a>
+            </div>
         </div>
     </div>
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Classes</h5>
-            <h6 class="card-subtitle mb-2 text-muted">View Classes</h6>
-            <p class="card-text">View all Classes registered for this semester</p>
-            <a class="card-link" asp-area="" asp-controller="AcademicClass" asp-action="Index">Classes</a>
+    }else
+    {
+    <div class="card-deck">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Assignments</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Submit Assignments</h6>
+                <p class="card-text">View All Assignments and submit your work</p>
+                <a class="card-link" asp-area="" asp-controller="Assignment" asp-action="Index">Assignments</a>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Classes</h5>
+                <h6 class="card-subtitle mb-2 text-muted">View Classes</h6>
+                <p class="card-text">View all Classes registered for this semester</p>
+                <a class="card-link" asp-area="" asp-controller="AcademicClass" asp-action="Index">Classes</a>
+            </div>
         </div>
     </div>
-</div>
-}
-else
-{
-<div class="card-deck">
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Assignments</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Submit Assignments</h6>
-            <p class="card-text">View All Assignments and submit your work</p>
-            <a class="card-link" asp-area="" asp-controller="Assignment" asp-action="Index">Assignments</a>
-        </div>
-    </div>
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Classes</h5>
-            <h6 class="card-subtitle mb-2 text-muted">View Classes</h6>
-            <p class="card-text">View all Classes registered for this semester</p>
-            <a class="card-link" asp-area="" asp-controller="AcademicClass" asp-action="Index">Classes</a>
-        </div>
-    </div>
-</div>
-}
-}
-else
+    }
+}else
 {
     <div class="text-center">
         <h1 class="display-4">Welcome to the Class System</h1>

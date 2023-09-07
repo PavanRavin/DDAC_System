@@ -14,6 +14,8 @@
     <Compile Remove="Migrations\System_ClassDB\20230902140753_classID.Designer.cs" />
     <Compile Remove="Migrations\System_ClassDB\20230902141023_classID.cs" />
     <Compile Remove="Migrations\System_ClassDB\20230902141023_classID.Designer.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230907084723_finalModel.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230907084723_finalModel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

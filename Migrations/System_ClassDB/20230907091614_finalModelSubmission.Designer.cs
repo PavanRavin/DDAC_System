@@ -4,14 +4,16 @@ using DDAC_System.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DDAC_System.Migrations.System_ClassDB
 {
     [DbContext(typeof(System_ClassDBContext))]
-    partial class System_ClassDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230907091614_finalModelSubmission")]
+    partial class finalModelSubmission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

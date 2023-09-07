@@ -28,8 +28,6 @@ namespace DDAC_System
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddDbContext<System_AssignmentDBContext>(option =>
-            option.UseSqlServer(Configuration.GetConnectionString("System_AssignmentDBContextCon")));
             services.AddDbContext<System_ClassDBContext>(option =>
             option.UseSqlServer(Configuration.GetConnectionString("System_ClassDBContextCon")));
         }

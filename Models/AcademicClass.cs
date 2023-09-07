@@ -16,5 +16,8 @@ namespace DDAC_System.Models
         public DateTime ClassEndTime { set; get; }
         public string Class_Location { set; get; }
 
+        public ICollection<Assignment> Assignment { get; }
+            = new List<Assignment>();
+
     }
 }

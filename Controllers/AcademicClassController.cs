@@ -23,7 +23,7 @@ namespace DDAC_System.Controllers
         // GET: AcademicClass
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AcademicClass.ToListAsync());
+            return View(await _context.AcademicClass.OrderBy(e => e.ClassStartTime).ToListAsync());
         }
 
         // GET: AcademicClass/Details/5
