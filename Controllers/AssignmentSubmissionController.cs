@@ -21,7 +21,7 @@ namespace DDAC_System.Controllers
     {
         private readonly System_ClassDBContext _context;
 
-        const string bucketname = "";
+        const string bucketname = "ddacassignments";
 
         public AssignmentSubmissionController(System_ClassDBContext context)
         {
