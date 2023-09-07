@@ -39,38 +39,59 @@ namespace DDAC_System.Migrations.System_ClassDB
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Class_Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Class_ID");
 
                     b.ToTable("AcademicClass");
                 });
 
-            modelBuilder.Entity("DDAC_System.Models.ViewClass", b =>
+
+
+                    b.HasKey("AssignmentID");
+
+                    b.HasIndex("Class_Name");
+
+                    b.HasKey("ViewClass_ID");
+
+            modelBuilder.Entity("DDAC_System.Models.AssignmentSubmission", b =>
                 {
-                    b.Property<int>("ViewClass_ID")
+                    b.Property<int>("SubmitID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("ViewClassEndTime")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("AssignmentID")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("ViewClassStartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ViewClass_Lecturer")
+                    b.Property<string>("SubmitName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ViewClass_Location")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("SubmitID");
 
-                    b.Property<string>("ViewClass_Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("AssignmentID");
 
-                    b.HasKey("ViewClass_ID");
+                    b.ToTable("AssignmentSubmission");
+                });
 
-                    b.ToTable("ViewClas");
+            modelBuilder.Entity("DDAC_System.Models.Assignment", b =>
+                {
+                    b.HasOne("DDAC_System.Models.AcademicClass", "AcademicClass")
+                        .WithMany("Assignment")
+                        .HasForeignKey("Class_Name")
+                        .HasPrincipalKey("Class_Name")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DDAC_System.Models.AssignmentSubmission", b =>
+                {
+                    b.HasOne("DDAC_System.Models.Assignment", "Assignment")
+                        .WithMany("AssignmentSubmission")
+                        .HasForeignKey("AssignmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

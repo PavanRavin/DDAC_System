@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DDAC_System.Controllers
 {
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles="Admin,Teacher,Student")]
     public class AcademicClassController : Controller
     {
         private readonly System_ClassDBContext _context;
@@ -45,6 +45,7 @@ namespace DDAC_System.Controllers
         }
 
         // GET: AcademicClass/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +56,7 @@ namespace DDAC_System.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Class_ID,Class_Name,Class_Lecturer,ClassStartTime,ClassEndTime,Class_Location")] AcademicClass academicClass)
         {
             if (ModelState.IsValid)
@@ -67,6 +69,7 @@ namespace DDAC_System.Controllers
         }
 
         // GET: AcademicClass/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,6 +90,7 @@ namespace DDAC_System.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Class_ID,Class_Name,Class_Lecturer,ClassStartTime,ClassEndTime,Class_Location")] AcademicClass academicClass)
         {
             if (id != academicClass.Class_ID)
@@ -118,6 +122,7 @@ namespace DDAC_System.Controllers
         }
 
         // GET: AcademicClass/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,6 +143,7 @@ namespace DDAC_System.Controllers
         // POST: AcademicClass/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var academicClass = await _context.AcademicClass.FindAsync(id);

@@ -1,10 +1,10 @@
 ﻿@model DDAC_System.Models.Assignment
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create New Assignment";
 }
 
-<h1>Create</h1>
+<h1>Create New Assignment</h1>
 
 <h4>Assignment</h4>
 <hr />
@@ -13,24 +13,29 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="AssignmentName" class="control-label"></label>
+                <label asp-for="AssignmentName" class="control-label">Name</label>
                 <input asp-for="AssignmentName" class="form-control" />
                 <span asp-validation-for="AssignmentName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AssignmentDesc" class="control-label"></label>
+                <label asp-for="AssignmentDesc" class="control-label">Description</label>
                 <input asp-for="AssignmentDesc" class="form-control" />
                 <span asp-validation-for="AssignmentDesc" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AssignmentHandOut" class="control-label"></label>
+                <label asp-for="AssignmentHandOut" class="control-label">Hand Out Date</label>
                 <input asp-for="AssignmentHandOut" class="form-control" />
                 <span asp-validation-for="AssignmentHandOut" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AssignmentDue" class="control-label"></label>
+                <label asp-for="AssignmentDue" class="control-label">Due Date</label>
                 <input asp-for="AssignmentDue" class="form-control" />
                 <span asp-validation-for="AssignmentDue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Class_Id" class="control-label"></label>
+                <input asp-for="Class_Id" class="form-control" />
+                <span asp-validation-for="Class_Id" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -15,5 +15,12 @@ namespace DDAC_System.Models
         public string AssignmentDesc { get; set; }
         public DateTime AssignmentHandOut { get; set; }
         public DateTime AssignmentDue { get; set; }
+
+        [ForeignKey("Class_Name")]
+        public string Class_Name { get; set; }
+        public AcademicClass AcademicClass { get; set; }
+
+        public ICollection<AssignmentSubmission> AssignmentSubmission { get; } 
+            = new List<AssignmentSubmission>();
     }
 }

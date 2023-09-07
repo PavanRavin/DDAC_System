@@ -10,18 +10,28 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DDAC_System.Controllers
 {
-    [Authorize(Roles="Teacher")]
+    [Authorize(Roles = "Teacher,Student")]
     public class AssignmentController : Controller
-    {
-        private readonly System_AssignmentDBContext _context;
+        //private readonly System_ClassDBContext _ClassDBContext;
+        private readonly UserManager<DDAC_SystemUser> _userManager;
+        private readonly System_ClassDBContext _context;
 
-        public AssignmentController(System_AssignmentDBContext context)
+        public AssignmentController(System_ClassDBContext context, UserManager<DDAC_SystemUser> usermanager)
         {
-            _context = context;
+            _userManager = usermanager;
         }
 
-        // GET: Assignment
-        public async Task<IActionResult> Index()
+        public SelectList GetTeacherClass()
+        {
+            var teacherClass = _context.AcademicClass
+                .Where(e => e.Class_Lecturer == User.Identity.Name)
+                .Select(e => e.Class_Name)
+                .ToList();
+            SelectList classes = new SelectList(teacherClass, "Class_Name");
+            return classes;
+        }
+
+    public async Task<IActionResult> Index()
         {
             return View(await _context.Assignment.ToListAsync());
         }
@@ -45,8 +55,10 @@ namespace DDAC_System.Controllers
         }
 
         // GET: Assignment/Create
+        [Authorize(Roles ="Teacher")]
         public IActionResult Create()
         {
+            ViewBag.ClassNameList = GetTeacherClass();
             return View();
         }
 
@@ -55,7 +67,8 @@ namespace DDAC_System.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AssignmentID,AssignmentName,AssignmentDesc,AssignmentHandOut,AssignmentDue")] Assignment assignment)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> Create([Bind("AssignmentID,AssignmentName,AssignmentDesc,AssignmentHandOut,AssignmentDue,Class_Name")] Assignment assignment)
         {
             if (ModelState.IsValid)
             {
@@ -67,6 +80,7 @@ namespace DDAC_System.Controllers
         }
 
         // GET: Assignment/Edit/5
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,6 +93,7 @@ namespace DDAC_System.Controllers
             {
                 return NotFound();
             }
+            ViewBag.ClassNameList = GetTeacherClass();
             return View(assignment);
         }
 
@@ -87,7 +102,8 @@ namespace DDAC_System.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AssignmentID,AssignmentName,AssignmentDesc,AssignmentHandOut,AssignmentDue")] Assignment assignment)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> Edit(int id, [Bind("AssignmentID,AssignmentName,AssignmentDesc,AssignmentHandOut,AssignmentDue,Class_Name")] Assignment assignment)
         {
             if (id != assignment.AssignmentID)
             {
@@ -118,6 +134,7 @@ namespace DDAC_System.Controllers
         }
 
         // GET: Assignment/Delete/5
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,6 +155,7 @@ namespace DDAC_System.Controllers
         // POST: Assignment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var assignment = await _context.Assignment.FindAsync(id);
@@ -146,9 +164,27 @@ namespace DDAC_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> SubmitAssignment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var assignment = await _context.Assignment
+                .FirstOrDefaultAsync(m => m.AssignmentID == id);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("Create", "AssignmentSubmission", assignment);
+        }
+
         private bool AssignmentExists(int id)
         {
             return _context.Assignment.Any(e => e.AssignmentID == id);
         }
     }
 }
+

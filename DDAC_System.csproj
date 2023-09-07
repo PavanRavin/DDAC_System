@@ -6,6 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\System_ClassDB\20230901102600_RelatedClassSchema.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230901102600_RelatedClassSchema.Designer.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230901105533_RelatedClassSchema.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230901105533_RelatedClassSchema.Designer.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230902140753_classID.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230902140753_classID.Designer.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230902141023_classID.cs" />
+    <Compile Remove="Migrations\System_ClassDB\20230902141023_classID.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.203.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.32" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.32" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.32" />

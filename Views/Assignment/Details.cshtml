@@ -1,38 +1,44 @@
 ﻿@model DDAC_System.Models.Assignment
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Details of Assignment";
 }
 
-<h1>Details</h1>
+<h1>Details of Assignment</h1>
 
 <div>
     <h4>Assignment</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AssignmentName)
+        <dt class="col-sm-2">
+            Name
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AssignmentName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AssignmentDesc)
+        <dt class="col-sm-2">
+            Description
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AssignmentDesc)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AssignmentHandOut)
+        <dt class="col-sm-2">
+            Hand Out Date
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AssignmentHandOut)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AssignmentDue)
+        <dt class="col-sm-2">
+            Due Date
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AssignmentDue)
+        </dd>
+        <dt class="col-sm-2">
+            Class
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Class_Name)
         </dd>
     </dl>
 </div>

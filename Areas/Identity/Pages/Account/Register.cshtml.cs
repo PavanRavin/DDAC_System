@@ -30,7 +30,6 @@ namespace DDAC_System.Areas.Identity.Pages.Account
         public SelectList RoleSelectList = new SelectList(new List<SelectListItem>
         { 
             //new SelectListItem { Selected = true, Text = "Select Role", Value = "" }, 
-            new SelectListItem { Selected = true, Text = "Admin", Value = "Admin" },
             new SelectListItem { Selected = true, Text = "Teacher", Value = "Teacher" },
             new SelectListItem { Selected = true, Text = "Student", Value = "Student" },
         }, "Value", "Text", 1);
@@ -101,14 +100,8 @@ namespace DDAC_System.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                bool roleExist = await _roleManager.RoleExistsAsync("Admin");
 
-                if (!roleExist)
-                {
-                    await _roleManager.CreateAsync(new IdentityRole("Admin"));
-                }
-
-                roleExist = await _roleManager.RoleExistsAsync("Student");
+                bool roleExist = await _roleManager.RoleExistsAsync("Student");
                 if (!roleExist)
                 {
                     await _roleManager.CreateAsync(new IdentityRole("Student"));
@@ -132,32 +125,12 @@ namespace DDAC_System.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    //_logger.LogInformation("User created a new account with password.");
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    //var callbackUrl = Url.Page(
-                    //    "/Account/ConfirmEmail",
-                    //    pageHandler: null,
-                    //    values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                    //    protocol: Request.Scheme);
-
-                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-                    //if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    //{
-                    //    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    //}
-                    //else
-                    //{
-                    //    await _signInManager.SignInAsync(user, isPersistent: false);
-                    //    return LocalRedirect(returnUrl);
-                    //}
 
                     await _userManager.AddToRoleAsync(user, Input.userRole);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount){
                             
-                        return RedirectToPage("Login");
+                        return RedirectToPage("Index");
                     }
                     else{
                         await _signInManager.SignInAsync(user, isPersistent: false);
