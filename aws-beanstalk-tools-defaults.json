@@ -1,0 +1,20 @@
+
+{
+    "region" : "us-east-1",
+    "configuration" : "Debug",
+    "framework"     : "netcoreapp3.1",
+    "self-contained" : false,
+    "application"    : "DDACSystem",
+    "environment"    : "DDACSystem-test",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-06e6a9c954133ab78,sg-06aaeffec3e9a7912\";\"aws:ec2:vpc,Subnets\"=\"subnet-0a2ccf09fa24f1bda\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.5.7 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "ddacsystem-test",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "",
+    "instance-profile"     : "LabInstanceProfile",
+    "service-role"         : "LabRole",
+    "proxy-server"         : "nginx"
+}

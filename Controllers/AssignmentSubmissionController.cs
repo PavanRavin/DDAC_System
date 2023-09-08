@@ -13,6 +13,8 @@ using System.IO;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon;
+using System.Net;
+using Amazon.S3.Transfer;
 
 namespace DDAC_System.Controllers
 {
@@ -49,10 +51,10 @@ namespace DDAC_System.Controllers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Index(int? id)
         {
-            var system_ClassDBContext = _context.AssignmentSubmission
+            var submissions = _context.AssignmentSubmission
                 .Where(a => a.AssignmentID == id)
                 .OrderBy(a => a.SubmitTime);
-            return View(await system_ClassDBContext.ToListAsync());
+            return View(await submissions.ToListAsync());
         }
 
         // GET: AssignmentSubmission/Create
@@ -69,7 +71,7 @@ namespace DDAC_System.Controllers
         [Authorize(Roles = "Student")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(List<IFormFile> Documents,[Bind("SubmitID,SubmitName,SubmitTime,AssignmentID")]AssignmentSubmission submission)
+        public async Task<IActionResult> Create(IFormFile Document,[Bind("SubmitID,SubmitName,SubmitTime,AssignmentID")]AssignmentSubmission submission)
         {
             if (ModelState.IsValid)
             {
@@ -79,41 +81,43 @@ namespace DDAC_System.Controllers
                 //2. Setup Connection to S3 Bucket
                 var s3clientobject = new AmazonS3Client(AWSKeys[0], AWSKeys[1], AWSKeys[2], RegionEndpoint.USEast1);
 
-                string filename = User.Identity.Name + ViewBag.assignment.AssignmentName;
-
-                //3. Send Images to S3 bucket
-                foreach (var files in Documents)
+                //3. Send Document to S3 bucket
+                //3.1 Input file validation
+                if (Document.Length <= 0)
                 {
-                    //3.1 Input file validation
-                    if (files.Length <= 0)
-                    {
-                        return BadRequest(files.FileName + "is empty! Image is not allowed to be uploaded to S3");
-                    }
+                    return BadRequest(Document.FileName + "is empty! Document is not allowed to be uploaded to S3");
+                }
 
-                    //3.2 Validation Passed
-                    try
+                string filename = User.Identity.Name + "_" + submission.Assignment.AssignmentName;
+
+                //3.2 Validation Passed
+                try
+                {
+                    using (var newMemoryStream = new MemoryStream())
                     {
-                        PutObjectRequest uploadReq = new PutObjectRequest
+                        Document.CopyTo(newMemoryStream);
+
+                        var uploadRequest = new TransferUtilityUploadRequest
                         {
-                            InputStream = files.OpenReadStream(),
-                            BucketName = bucketname + "/docs", //Bucket path/Bucket folder
-                            Key = files.FileName, //image object name in s3
-                            CannedACL = S3CannedACL.PublicRead //open to public access to upload object
+                            InputStream = newMemoryStream,
+                            Key = filename,
+                            BucketName = bucketname + "/docs",
+                            CannedACL = S3CannedACL.PublicRead
                         };
 
-                        await s3clientobject.PutObjectAsync(uploadReq);
-                        filename = filename + " " + files.FileName + ",";
-                    }
-                    catch (AmazonS3Exception ex)
-                    {
-                        return BadRequest("Error in file of" + files.FileName + ":" + ex.Message);
-                    }
-                    catch (Exception e2)
-                    {
-                        return BadRequest("Error in file of" + files.FileName + ":" + e2.Message);
+                        var fileTransferUtility = new TransferUtility(s3clientobject);
+                        await fileTransferUtility.UploadAsync(uploadRequest);
                     }
                 }
-                submission.SubmitName = filename;
+                catch (AmazonS3Exception ex)
+                {
+                    return BadRequest("Error in file of" + Document.FileName + ":" + ex.Message);
+                }
+                catch (Exception e2)
+                {
+                    return BadRequest("Error in file of" + Document.FileName + ":" + e2.Message);
+                }
+                submission.SubmitName = User.Identity.Name;
                 submission.AssignmentID = ViewBag.assignment.AssignmentID;
                 submission.SubmitTime = DateTime.Now;
                 _context.Add(submission);
@@ -122,5 +126,36 @@ namespace DDAC_System.Controllers
             }
             return RedirectToAction("Index","Assignment");
         }
+
+        [Authorize(Roles = "Teacher")]
+        public async Task<GetObjectResponse> DownloadSubmission(int? id)
+        {
+            var submission = _context.AssignmentSubmission
+                .Where(a => a.SubmitID == id);
+
+            List<string> AWSKeys = getAWSCredentials();
+
+            //2. Setup Connection to S3 Bucket
+            var s3clientobject = new AmazonS3Client(AWSKeys[0], AWSKeys[1], AWSKeys[2], RegionEndpoint.USEast1);
+
+            string filename = submission.FirstOrDefault().SubmitName.ToString();
+
+            try
+            {
+                return await s3clientobject.GetObjectAsync(bucketname + "/docs", filename);
+
+            }
+            catch (AmazonS3Exception ex)
+            {
+                BadRequest("Error in file of" + filename + ":" + ex.Message);
+                return null;
+            }
+            catch (Exception e2)
+            {
+                BadRequest("Error in file of" + filename + ":" + e2.Message);
+                return null;
+            }
+        }
+
     }
 }
