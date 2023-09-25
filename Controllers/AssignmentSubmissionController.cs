@@ -71,7 +71,7 @@ namespace DDAC_System.Controllers
         [Authorize(Roles = "Student")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile Document,[Bind("SubmitID,SubmitName,SubmitTime,AssignmentID")]AssignmentSubmission submission)
+        public async Task<IActionResult> Create(IFormFile Document)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace DDAC_System.Controllers
                     return BadRequest(Document.FileName + "is empty! Document is not allowed to be uploaded to S3");
                 }
 
-                string filename = User.Identity.Name + "_" + submission.Assignment.AssignmentName;
+                string filename = User.Identity.Name + "_" + ViewBag.assignment.AssignmentName;
 
                 //3.2 Validation Passed
                 try
@@ -117,7 +117,8 @@ namespace DDAC_System.Controllers
                 {
                     return BadRequest("Error in file of" + Document.FileName + ":" + e2.Message);
                 }
-                submission.SubmitName = User.Identity.Name;
+                AssignmentSubmission submission = new AssignmentSubmission();
+                submission.SubmitName = filename;
                 submission.AssignmentID = ViewBag.assignment.AssignmentID;
                 submission.SubmitTime = DateTime.Now;
                 _context.Add(submission);
@@ -128,7 +129,7 @@ namespace DDAC_System.Controllers
         }
 
         [Authorize(Roles = "Teacher")]
-        public async Task<GetObjectResponse> DownloadSubmission(int? id)
+        public async Task<IActionResult> DownloadSubmission(int? id)
         {
             var submission = _context.AssignmentSubmission
                 .Where(a => a.SubmitID == id);
@@ -142,18 +143,31 @@ namespace DDAC_System.Controllers
 
             try
             {
-                return await s3clientobject.GetObjectAsync(bucketname + "/docs", filename);
+                TransferUtility transferUtility = new TransferUtility(s3clientobject);
 
+                var response = await transferUtility.S3Client.GetObjectAsync(new GetObjectRequest()
+                {
+                    BucketName = bucketname+ "/docs",
+                    Key = filename
+                });
+
+                if (response.ResponseStream == null)
+                {
+                    return NotFound();
+                }
+                return File(response.ResponseStream, response.Headers.ContentType, filename);
             }
-            catch (AmazonS3Exception ex)
+            catch (AmazonS3Exception amazonS3Exception)
             {
-                BadRequest("Error in file of" + filename + ":" + ex.Message);
-                return null;
-            }
-            catch (Exception e2)
-            {
-                BadRequest("Error in file of" + filename + ":" + e2.Message);
-                return null;
+                if (amazonS3Exception.ErrorCode != null && (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId") || 
+                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                {
+                    throw new Exception("Please check the AWS Credentials.");
+                }
+                else
+                {
+                    throw new Exception(amazonS3Exception.Message);
+                }
             }
         }
 
